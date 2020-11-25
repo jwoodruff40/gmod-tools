@@ -14,32 +14,12 @@ net.Receive("sethealth", function(len, ply)
 )
 
 function gmtHeal(ply, args)
-    local target
-
-    if args[1] then
-        for k, v in ipairs(player.GetAll()) do
-            if string.find(v:Nick(), args[1]) then target = v end
-        end
-    end
-    local target = target or ply
-    
-    target:SetHealth(target:GetMaxHealth())
+    ply:SetHealth(ply:GetMaxHealth())
 end
 
 function gmtSetHealth(ply, args)
-    local target
-    local health = args[2] or args[1]
-
-    if !health then return end 
-
-    if args[2] then
-        for k, v in ipairs(player.GetAll()) do
-            if string.find(v:Nick(), args[1]) then target = v end
-        end
-    end
-    local target = target or ply
-
-    target:SetHealth(health)
+    if !args[1] then return end 
+    ply:SetHealth(args[1])
 end
 
 end
