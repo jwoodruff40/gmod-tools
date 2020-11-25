@@ -1,5 +1,2 @@
-if SERVER then
-
 include "gmt_ammo.lua"
-
-end
+include "gmt_health.lua"
