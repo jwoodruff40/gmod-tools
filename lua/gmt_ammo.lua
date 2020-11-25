@@ -1,10 +1,11 @@
 if SERVER then
 
+util.AddNetworkString("giveammo")
 util.AddNetworkString("maxammo")
 util.AddNetworkString("allammo")
 
 net.Receive("maxammo", function(len, ply)
-    gmtGiveAmmo(ply, net.ReadTable())
+    gmtMaxAmmo(ply, net.ReadTable())
     end
 )
 
@@ -13,7 +14,12 @@ net.Receive("allammo", function(len, ply)
     end
 )
 
-function gmtGiveAmmo(ply, args)
+net.Receive("giveammo", function(len, ply)
+    gmtGiveAmmo(ply, net.ReadTable())
+    end
+)
+
+function gmtMaxAmmo(ply, args)
     local weap = ply:GetActiveWeapon()
     local ammo = weap:GetPrimaryAmmoType()
     local ammo2 =weap:GetSecondaryAmmoType()
@@ -41,6 +47,13 @@ function gmtAllAmmo(ply, args)
     end
 end
 
+function gmtGiveAmmo(ply, args)
+    local weap = ply:GetActiveWeapon()
+    local ammo = weap:GetPrimaryAmmoType()
+
+    if args[1] then ply:GiveAmmo(args[1], ammo) end
+end
+
 end
 
 if CLIENT then
@@ -54,6 +67,13 @@ concommand.Add("givemaxammo", function(ply, cmd, args)
 
 concommand.Add("giveallammo", function(ply, cmd, args)
     net.Start("allammo")
+    net.WriteTable(args)
+    net.SendToServer()
+    end
+, nil, nil, FCVAR_CHEAT)
+
+concommand.Add("giveammo", function(ply, cmd, args)
+    net.Start("giveammo")
     net.WriteTable(args)
     net.SendToServer()
     end
